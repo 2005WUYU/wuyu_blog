@@ -3,6 +3,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import Miku from '../components/Miku.jsx';
 ---
 
 <!doctype html>
@@ -45,5 +46,6 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			</p>
 		</main>
 		<Footer />
+		<Miku client:only="react" />
 	</body>
 </html>

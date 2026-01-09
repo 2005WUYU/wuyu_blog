@@ -55,3 +55,6 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image.src, Astro.url)} />
+
+<!-- Live2D Cubism 4 SDK Core - 必须在 React 组件之前加载 -->
+<script is:inline src="/live2dcubismcore.min.js"></script>
