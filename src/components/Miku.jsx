@@ -3,7 +3,6 @@ import React, { useEffect, useRef } from 'react';
 import * as PIXI from 'pixi.js';
 import { Live2DModel } from 'pixi-live2d-display/cubism4';
 
-// 将 PIXI 暴露给 window（pixi-live2d-display 需要）
 if (typeof window !== 'undefined') {
   window.PIXI = PIXI;
 }
@@ -13,87 +12,84 @@ export default function Miku() {
   const appRef = useRef(null);
   const modelRef = useRef(null);
 
+  // 定义画布固定尺寸 (这个尺寸足够放下一个半身/全身的 Live2D)
+  const CANVAS_WIDTH = 400;
+  const CANVAS_HEIGHT = 500;
+
   useEffect(() => {
-    // 检查 Cubism Core 是否已加载
     if (typeof window.Live2DCubismCore === 'undefined') {
       console.error('Live2DCubismCore not loaded!');
       return;
     }
 
-    // 初始化 PIXI 应用
+    // 1. 初始化 PIXI (注意：不再使用 window 大小，而是固定大小)
     const app = new PIXI.Application({
       view: canvasRef.current,
       autoStart: true,
       backgroundAlpha: 0,
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: CANVAS_WIDTH,
+      height: CANVAS_HEIGHT,
     });
     appRef.current = app;
 
-    // 加载模型
     const loadModel = async () => {
       try {
+        // 2. 加载模型
         const model = await Live2DModel.from('/live2D/miku/miku_sample_t04.model3.json', {
-          autoInteract: false, // 禁用自动交互，避免兼容性问题
+          autoInteract: false,
         });
         
         modelRef.current = model;
         app.stage.addChild(model);
 
-        // 调整模型大小和位置
-        const scale = 0.5;
+        // 3. 调整模型大小和位置 (关键！)
+        // 坐标系现在是基于 400x500 的画布，而不是全屏
+        const scale = 0.3; // 根据模型实际大小微调，Miku通常很大
         model.scale.set(scale);
         
-        // 定位到右下角
-        model.x = window.innerWidth - model.width / 2 - 50;
-        model.y = window.innerHeight - 50;
-        model.anchor.set(0.5, 1);
+        // 居中放置在画布底部
+        model.x = CANVAS_WIDTH / 2;
+        model.y = CANVAS_HEIGHT; 
+        model.anchor.set(0.5, 1); // 锚点设在模型脚底中心
 
-        // 开始播放 idle 动画
         if (model.internalModel.motionManager) {
           model.internalModel.motionManager.startRandomMotion('Idle');
         }
 
-        // 鼠标跟随（手动实现，避免内置交互的兼容性问题）
+        // 4. 鼠标视线跟随 (坐标计算逻辑修正)
         const onMouseMove = (e) => {
           if (model && model.internalModel) {
-            // 计算鼠标相对于模型的位置
             const rect = canvasRef.current.getBoundingClientRect();
+            // 计算鼠标在画布内的相对坐标
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
             
-            // 让模型看向鼠标
             model.internalModel.focusController?.focus(
               (x - model.x) / model.width,
               (y - model.y) / model.height
             );
           }
         };
-        
         window.addEventListener('mousemove', onMouseMove);
         model._onMouseMove = onMouseMove;
 
-        // 点击触发动作
-        canvasRef.current.style.pointerEvents = 'auto';
+        // 5. 点击交互逻辑
         const onClick = (e) => {
           const rect = canvasRef.current.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
           
-          // 检查点击是否在模型范围内
-          const modelBounds = model.getBounds();
-          if (x >= modelBounds.x && x <= modelBounds.x + modelBounds.width &&
-              y >= modelBounds.y && y <= modelBounds.y + modelBounds.height) {
-            // 播放随机 Tap 动画
-            if (model.internalModel.motionManager) {
-              model.internalModel.motionManager.startRandomMotion('Tap');
-            }
+          // 简单的判定：只要点在画布内就触发，因为画布本身就很小
+          // 如果需要精确判定点在人身上，可以使用 model.hitTest(x,y) 但比较复杂
+          if (model.internalModel.motionManager) {
+             console.log("Miku Tap!");
+             model.internalModel.motionManager.startRandomMotion('Tap');
           }
         };
+        // 监听画布的点击，而不是全局点击
         canvasRef.current.addEventListener('click', onClick);
         model._onClick = onClick;
 
-        console.log('Miku model loaded successfully!');
       } catch (error) {
         console.error('Failed to load Live2D model:', error);
       }
@@ -101,21 +97,9 @@ export default function Miku() {
 
     loadModel();
 
-    // 窗口大小变化时重新定位
-    const handleResize = () => {
-      if (appRef.current) {
-        appRef.current.renderer.resize(window.innerWidth, window.innerHeight);
-      }
-      if (modelRef.current) {
-        modelRef.current.x = window.innerWidth - modelRef.current.width / 2 - 50;
-        modelRef.current.y = window.innerHeight - 50;
-      }
-    };
-    window.addEventListener('resize', handleResize);
+    // 不需要 Resize 监听了，因为我们是固定挂件
 
-    // 清理函数
     return () => {
-      window.removeEventListener('resize', handleResize);
       if (modelRef.current) {
         if (modelRef.current._onMouseMove) {
           window.removeEventListener('mousemove', modelRef.current._onMouseMove);
@@ -135,12 +119,15 @@ export default function Miku() {
       ref={canvasRef} 
       style={{
         position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 999,
-        pointerEvents: 'none',
-        width: '100vw',
-        height: '100vh',
+        // 关键定位：钉死在右下角
+        bottom: 0, 
+        right: 0,
+        zIndex: 50, // 层级不用太夸张，不挡 Header 就行
+        // 关键交互：必须允许点击！
+        // 因为我们已经通过 bottom/right 避开了导航栏，所以这里可以开启交互
+        pointerEvents: 'auto', 
+        width: '400px',
+        height: '500px',
       }} 
     />
   );

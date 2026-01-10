@@ -16,4 +16,37 @@ const blog = defineCollection({
 		}),
 });
 
-export const collections = { blog };
+const essay = defineCollection({
+	loader: glob({ base: './src/content/essay', pattern: '**/*.{md,mdx}' }),
+	schema: z.object({
+		title: z.string(),
+		description: z.string().optional(),
+		pubDate: z.coerce.date(),
+		updatedDate: z.coerce.date().optional(),
+		tags: z.array(z.string()).optional(),
+	}),
+});
+
+const study = defineCollection({
+	loader: glob({ base: './src/content/study', pattern: '**/*.{md,mdx}' }),
+	schema: z.object({
+		title: z.string(),
+		description: z.string().optional(),
+		pubDate: z.coerce.date(),
+		updatedDate: z.coerce.date().optional(),
+		tags: z.array(z.string()).optional(),
+	}),
+});
+
+const tech = defineCollection({
+	loader: glob({ base: './src/content/tech', pattern: '**/*.{md,mdx}' }),
+	schema: z.object({
+		title: z.string(),
+		description: z.string().optional(),
+		pubDate: z.coerce.date(),
+		updatedDate: z.coerce.date().optional(),
+		tags: z.array(z.string()).optional(),
+	}),
+});
+
+export const collections = { blog, essay, study, tech };
