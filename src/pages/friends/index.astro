@@ -1,0 +1,184 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+interface FriendLink {
+	name?: string;
+	url?: string;
+	avatar?: string;
+	description?: string;
+}
+
+const friendLinks: FriendLink[] = [
+	{
+		name: 'Yuuko',
+		url: 'yuukowww.github.io',
+		avatar: 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEEOLdpBMmBXRUlgNlNCv7TQlnr-uSXbgACyBgAAgJcKVQf4vtPBecjgjYE.jpg',
+		description: '',
+	},
+	{
+		name: '',
+		url: 'knightofaxis.github.io',
+		avatar: '',
+		description: '博士生在读，vLLM绝赞学习中，目标是成为世一码',
+	},
+	{
+		name: '',
+		url: 'https://blog.candlest.cc',
+		avatar: '',
+		description: 'C神，蜡烛宝宝',
+	},
+	{
+		name: '',
+		url: 'https://blog.honkai.top',
+		avatar: '',
+		description: '',
+	},
+];
+
+const toFullUrl = (url?: string) => {
+	if (!url) return '';
+	if (/^https?:\/\//i.test(url)) return url;
+	return `https://${url}`;
+};
+
+const getHost = (url?: string) => {
+	const full = toFullUrl(url);
+	if (!full) return '';
+	try {
+		return new URL(full).host;
+	} catch {
+		return full;
+	}
+};
+
+const getDisplayName = (item: FriendLink) => item.name?.trim() || getHost(item.url) || '未命名站点';
+---
+
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<BaseHead title={`${SITE_TITLE} | 友链`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 960px;
+			}
+
+			.friend-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 1rem;
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+
+			.friend-card {
+				border: 1px solid rgba(var(--black), 0.12);
+				border-radius: 12px;
+				padding: 1rem;
+				background: #fff;
+				display: grid;
+				grid-template-columns: 56px 1fr;
+				column-gap: 0.85rem;
+				align-items: start;
+				min-height: 130px;
+				transition: border-color 0.2s ease, box-shadow 0.2s ease;
+			}
+
+			.friend-card:hover {
+				border-color: rgb(var(--accent));
+				box-shadow: var(--box-shadow);
+			}
+
+			.avatar {
+				width: 56px;
+				height: 56px;
+				border-radius: 50%;
+				object-fit: cover;
+				display: block;
+				background: rgba(var(--gray-light), 0.45);
+			}
+
+			.avatar-fallback {
+				width: 56px;
+				height: 56px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: rgba(var(--gray), 0.18);
+				color: rgb(var(--black));
+				font-weight: 700;
+			}
+
+			.friend-name {
+				margin: 0;
+				font-size: 1.05rem;
+				line-height: 1.35;
+			}
+
+			.friend-url {
+				display: inline-block;
+				margin-top: 0.25rem;
+				font-size: 0.92rem;
+				word-break: break-all;
+			}
+
+			.friend-desc {
+				margin: 0.65rem 0 0;
+				color: rgb(var(--gray));
+				line-height: 1.6;
+				min-height: 1.6em;
+			}
+
+			@media (max-width: 900px) {
+				.friend-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>友链</h1>
+			<ul class="friend-grid">
+				{
+					friendLinks.map((item) => {
+						const fullUrl = toFullUrl(item.url);
+						const displayName = getDisplayName(item);
+						const displayLink = item.url?.trim() || '';
+						const intro = item.description?.trim() || '';
+						const avatar = item.avatar?.trim() || '';
+						const initials = displayName.slice(0, 1).toUpperCase();
+
+						return (
+							<li class="friend-card">
+								{avatar ? (
+									<img class="avatar" src={avatar} alt={`${displayName} avatar`} loading="lazy" />
+								) : (
+									<div class="avatar-fallback" aria-hidden="true">{initials}</div>
+								)}
+								<div>
+									<h2 class="friend-name">{displayName}</h2>
+									{fullUrl ? (
+										<a class="friend-url" href={fullUrl} target="_blank" rel="noopener noreferrer">
+											{displayLink || fullUrl}
+										</a>
+									) : (
+										<span class="friend-url"></span>
+									)}
+									<p class="friend-desc">{intro}</p>
+								</div>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</main>
+		<Footer />
+	</body>
+</html>
