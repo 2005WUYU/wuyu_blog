@@ -2,9 +2,10 @@
 title: 'Qwen2.5-7B LoRA 微调显存分析与 FlashAttention 原理'
 description: '从全参数微调到 LoRA 的显存拆解，结合混合精度与 FlashAttention 核心机制的推导说明。'
 pubDate: 'Apr 06 2026'
+heroImage: '../../assets/mmexport1749396240039.jpg'
 ---
 
-# 第一部分：分析显存占用
+## 第一部分：分析显存占用
 
 ## 1. 先分析全参数微调的显存占用
 
@@ -147,7 +148,7 @@ $$
 M_{\text{activations}} \approx B \times S \times h \times L \times 34 \text{ bytes}
 $$
 
-# 第二部分：混合精度
+## 第二部分：混合精度
 
 当代码进入 trainer.train() 的前向阶段，Hugging Face 会开启 torch.autocast(device_type='cuda', dtype=torch.bfloat16) 上下文。以其中的一个 LoRA 线性层计算为例。
 
@@ -191,7 +192,7 @@ $$
 
 上述公式中的 $\theta$ 代表 LoRA 的 FP32 主权重。更新完成后，在下一次前向传播时，再重复 Cast 为 BF16。
 
-# 第三部分：FlashAttention 机制原理
+## 第三部分：FlashAttention 机制原理
 
 令查询、键、值矩阵为 $Q, K, V \in \mathbb{R}^{N \times d}$。SRAM 大小限制了只能装载大小为 $B_c \times B_r$ 的块。将 $Q$ 划分为 $T_r$ 个块 $Q_i$，将 $K, V$ 划分为 $T_c$ 个块 $K_j, V_j$。在线 Softmax 必须解决分块计算时的归一化分母缺失问题。
 
