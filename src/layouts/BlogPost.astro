@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import { ViewTransitions } from 'astro:transitions';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -14,6 +15,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 
 <html lang="en">
 	<head>
+		<ViewTransitions />
 		<BaseHead title={title} description={description} />
 		<style>
 			main {
