@@ -5,27 +5,48 @@ import Layout from '../layouts/BlogPost.astro';
 
 <Layout
 	title="About Me"
-	description="Lorem ipsum dolor sit amet"
+	description="中山大学生物医学工程学院 28 届在读，当前专注 AI Infra。"
 	pubDate={new Date('August 08 2021')}
 	heroImage={AboutHeroImage}
 >
-	<p>
-		
-	</p>
+	<section class="about-block">
+		<p>
+			中山大学生物医学工程学院 28 届在读。医学是兴趣，转码是生活；当前主要专注 AI Infra，方向包括训推框架、异构模型并行与通信库。
+		</p>
+		<p>
+			预计 2026 年 4 到 6 月会持续更新博客，欢迎交流，也欢迎批评指正。
+		</p>
+	</section>
 
-	<p>
-		
-	</p>
+	<section class="about-block">
+		<h2>联系方式</h2>
+		<p>
+			邮箱：<a href="mailto:wuyu051019@qq.com">wuyu051019@qq.com</a>
+		</p>
+	</section>
 
-	<p>
-		
-		
-	</p>
+	<section class="about-block">
+		<h2>兴趣</h2>
+		<p>
+			平常听术力口比较多，中术日术都会听，C 社六子、Vsinger、五维介质、心华等都在歌单里；也会给棉花娃娃换装，常常带着娃娃去 citywalk 或旅行拍照。
+		</p>
+		<p>
+			动画偏好户外题材，比如摇曳露营、mono、向山进发、少女终末旅行；自己也喜欢徒步和露营，目标是毕业前走完深圳市内所有推荐徒步线路。
+		</p>
+		<p>
+			游戏以单机为主：赛博朋克 2077、巫师 3、荒野大镖客、theHunter，也喜欢互动叙事类作品。读书方面喜欢李贺的诗和恶之花这类风格强烈的文本。
+		</p>
+	</section>
 
-	<p>
-		
-	</p>
+	<style>
+		.about-block {
+			margin-bottom: 1.5rem;
+			line-height: 1.8;
+		}
 
-	<p>
-		
+		.about-block h2 {
+			margin: 0 0 0.5rem;
+			font-size: 1.2rem;
+		}
+	</style>
 </Layout>
