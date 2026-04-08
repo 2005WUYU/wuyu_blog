@@ -5,6 +5,10 @@ import Header from '../components/Header.astro';
 import Miku from '../components/Miku.jsx';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import img1 from '../assets/八辈子洛天依.jpg';
+import img2 from '../assets/十四行诗.jpg';
+import img3 from '../assets/lolita洛天依.jpg';
 
 // 抓取所有文章
 const allBlogs = await getCollection('blog').catch(() => []);
@@ -121,7 +125,7 @@ const navLinks = [
         font-size: 0.95rem;
         line-height: 1.7;
         opacity: 0.85;
-        max-width: 80%;
+        max-width: 100%;
         margin-bottom: 2rem;
       }
       .nav-links {
@@ -271,9 +275,9 @@ const navLinks = [
         <header class="hero">
           <div>
             <h1 class="hero-title">wuyu's Space</h1>
-            <div class="hero-subtitle">Code / Art / ACG Life</div>
+            <div class="hero-subtitle">Code / Society / BME / ACG Life</div>
             <p class="about-text">
-              欢迎来到我的 Blog！这里是沉淀技术与创意的空间。我主攻前后端开发与推理引擎研究，同时也是一位二次元插画爱好者（涉及线稿、油画、漫画风格）。未来也会在这里分享我的画作和全新的 Live2D 形象。
+              欢迎来到我的 Blog！技术主要方向目前是训推框架，同时也会分享bme课程学习相关与感兴趣的人文社科论题的探讨。
             </p>
             <nav class="nav-links">
               {navLinks.map(link => (
@@ -324,24 +328,14 @@ const navLinks = [
       <div>
         <div class="section-title" style="margin-left: 1rem;">Selected Works</div>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 4rem;">
-          <!-- 预留的插画坑位 (Gallery placeholders) -->
-          <div style="background: var(--card-bg); height: 260px; border-radius: 16px; border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
-            <div style="text-align: center; opacity: 0.5;">
-              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎨</div>
-              <div style="font-size: 0.85rem; letter-spacing: 1px;">即将展示 / LINE ART</div>
-            </div>
+          <div style="border-radius: 16px; overflow: hidden; border: 1px solid var(--border-light); height: 260px;">
+            <Image src={img1} alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
           </div>
-          <div style="background: var(--card-bg); height: 260px; border-radius: 16px; border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
-            <div style="text-align: center; opacity: 0.5;">
-              <div style="font-size: 2rem; margin-bottom: 0.5rem;">🖼️</div>
-              <div style="font-size: 0.85rem; letter-spacing: 1px;">即将展示 / OIL PAINT</div>
-            </div>
+          <div style="border-radius: 16px; overflow: hidden; border: 1px solid var(--border-light); height: 260px;">
+            <Image src={img2} alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
           </div>
-          <div style="background: var(--card-bg); height: 260px; border-radius: 16px; border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
-            <div style="text-align: center; opacity: 0.5;">
-              <div style="font-size: 2rem; margin-bottom: 0.5rem;">✍️</div>
-              <div style="font-size: 0.85rem; letter-spacing: 1px;">即将展示 / MANGA</div>
-            </div>
+          <div style="border-radius: 16px; overflow: hidden; border: 1px solid var(--border-light); height: 260px;">
+            <Image src={img3} alt="" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
           </div>
         </div>
       </div>
