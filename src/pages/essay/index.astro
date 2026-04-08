@@ -1,111 +1,174 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('essay')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/essay/${post.id}/`}>
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
+<html lang="zh-cn">
+  <head>
+    <BaseHead title={`Essay - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+    <style>
+      :root {
+         --text-color: #2c3e50;
+        --bg-color: #f7f9fc;
+        --border-light: rgba(0,0,0,0.08);
+        --accent: #66ccff;
+        --card-bg: rgba(255, 255, 255, 0.6);
+        --glass-border: rgba(255,255,255,0.4);
+      }
+      html.dark {
+        --text-color: #e2e8f0;
+        --bg-color: #1a1b26;
+        --border-light: rgba(255,255,255,0.08);
+        --accent: #88ddff;
+        --card-bg: rgba(30,30,46,0.5);
+        --glass-border: rgba(255,255,255,0.05);
+      }
+      body {
+        margin: 0;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        transition: background-color 0.4s ease, color 0.4s ease;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 840px;
+        margin: 0 auto;
+        padding: 5rem 2rem;
+      }
+      .page-header {
+        margin-bottom: 3rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .page-title {
+        font-size: 2.2rem;
+        font-weight: 300;
+        letter-spacing: 2px;
+        color: var(--text-color);
+        margin: 0;
+      }
+      .nav-links {
+        display: flex;
+        gap: 1.8rem;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--text-color);
+        opacity: 0.7;
+        font-size: 0.95rem;
+        transition: opacity 0.3s, color 0.3s;
+      }
+      .nav-links a:hover {
+        opacity: 1;
+        color: var(--accent);
+      }
+      .list-container {
+        background: var(--card-bg);
+        backdrop-filter: blur(8px);
+        border-radius: 16px;
+        padding: 0 2rem;
+        border: 1px solid var(--border-light);
+      }
+      .post-item {
+        padding: 1.5rem 0;
+        border-bottom: 1px solid var(--border-light);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+      .post-item::before {
+        content: '';
+        position: absolute;
+        left: -1rem;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        background: var(--accent);
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+      }
+      .post-item:hover {
+        padding-left: 1rem;
+      }
+      .post-item:hover::before {
+        transform: scaleY(0.6);
+      }
+      .post-item:last-child {
+        border-bottom: none;
+      }
+      .post-meta {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      .post-date {
+        font-size: 0.85rem;
+        opacity: 0.5;
+        font-family: monospace;
+      }
+      .post-title {
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 1.3rem;
+        font-weight: 500;
+      }
+      .post-title:hover {
+        color: var(--accent);
+      }
+      .back-btn {
+        margin-bottom: 2rem;
+        display: inline-block;
+        text-decoration: none;
+        color: var(--text-color);
+        opacity: 0.6;
+        transition: opacity 0.3s;
+      }
+      .back-btn:hover {
+        opacity: 1;
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="/" class="back-btn">← Back to Home</a>
+      <div class="page-header">
+        <h1 class="page-title">Essay</h1>
+        <nav class="nav-links">
+          <a href="/blog/">Blog</a>
+        </nav>
+      </div>
+
+      <div class="list-container">
+        {posts.length === 0 ? <p style="padding: 2rem 0; opacity: 0.5;">暂无随笔想法...</p> : posts.map((post) => (
+          <div class="post-item">
+            <a href={`/essay/${post.id}/`} class="post-title">
+              {post.data.title}
+            </a>
+            <div class="post-meta">
+              <span class="post-date">{post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit'})}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <script is:inline>
+      const html = document.documentElement;
+      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        html.classList.add('dark');
+      }
+    </script>
+  </body>
 </html>

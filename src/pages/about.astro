@@ -1,61 +1,129 @@
 ---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import AboutHeroImage from '../assets/mmexport1749379047132.jpg';
-import Layout from '../layouts/BlogPost.astro';
 ---
 
-<Layout
-	title="About Me"
-	description="中山大学生物医学工程学院 28 届在读，当前专注 AI Infra。"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-	<section class="about-block">
-		<p>
-			中山大学生物医学工程学院 28 届在读。
-		</p>
-		<p>
-			医学是兴趣，转码是生活；当前主要专注 AI Infra，方向包括训推框架、异构模型并行与通信库。
-		</p>
-		<p>
-			预计 2026 年 4 到 6 月会持续更新博客，欢迎交流，也欢迎批评指正。
-		</p>
-	</section>
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <BaseHead title={`About - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+    <style>
+      :root {
+        --text-color: #2c3e50;
+        --bg-color: #f7f9fc;
+        --border-light: rgba(0,0,0,0.08);
+        --accent: #66ccff;
+        --card-bg: rgba(255, 255, 255, 0.6);
+        --glass-border: rgba(255,255,255,0.4);
+      }
+      html.dark {
+        --text-color: #e2e8f0;
+        --bg-color: #1a1b26;
+        --border-light: rgba(255,255,255,0.08);
+        --accent: #88ddff;
+        --card-bg: rgba(30,30,46,0.5);
+        --glass-border: rgba(255,255,255,0.05);
+      }
+      body {
+        margin: 0;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        transition: background-color 0.4s ease, color 0.4s ease;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 840px;
+        margin: 0 auto;
+        padding: 5rem 2rem;
+      }
+      .page-header {
+        margin-bottom: 3rem;
+      }
+      .page-title {
+        font-size: 2.2rem;
+        font-weight: 300;
+        letter-spacing: 2px;
+        color: var(--text-color);
+        margin: 0 0 1rem 0;
+      }
+      .glass-panel {
+        background: var(--card-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--glass-border);
+        border-radius: 16px;
+        padding: 3rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+      }
+      h2 {
+        color: var(--accent);
+        font-size: 1.4rem;
+        margin-top: 2.5rem;
+      }
+      h2:first-of-type {
+        margin-top: 0;
+      }
+      p {
+        line-height: 1.8;
+        opacity: 0.85;
+        margin-bottom: 1rem;
+      }
+      .back-btn {
+        margin-bottom: 2rem;
+        display: inline-block;
+        text-decoration: none;
+        color: var(--text-color);
+        opacity: 0.6;
+        transition: opacity 0.3s;
+      }
+      .back-btn:hover {
+        opacity: 1;
+        color: var(--accent);
+      }
+      .hero-image {
+        width: 100%;
+        max-width: 400px;
+        border-radius: 12px;
+        margin-top: 1rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="/" class="back-btn">← Back to Home</a>
+      <div class="page-header">
+        <h1 class="page-title">About Me</h1>
+      </div>
 
-	<section class="about-block">
-		<h2>联系方式</h2>
-		<p>
-			邮箱：<a href="mailto:wuyu051019@qq.com">wuyu051019@qq.com</a>
-		</p>
-	</section>
+      <div class="glass-panel">
 
-	<section class="about-block">
-		<h2>兴趣</h2>
-		<p>
-			爱好的话，平常听术力口会很多很多，歌单基本都是术力口，中术日术都有，c社六子、vsinger、五维介质、心华等等等等都听，但只是听也不怎么混圈）
-		</p>
-		<p>
-			养了很多棉花娃娃，平常看到可爱的娃衣会给她们换装；一大爱好是出门给棉花娃娃拍照，远的话就是带着棉花娃娃全国到处旅游，近的话出去逛街citywalk偶尔也会带着
-		</p>
-		<p>
-			平常看户外番像摇曳露营mono女孩向山进发少女终末旅行之类的比较多，所以也比较喜欢户外活动如徒步、露营等，目标是毕业前徒步深圳市内所有推荐线路
-		</p>
-		<p>
-			打游戏也是以单机为主，赛博朋克2077、巫师三、荒野大镖客、the hunter，还有互动叙事类电影游戏像底特律变人暴雨黑相集之类的
-		</p>
-		<p>
-			唔，其他的爱好，读书应该算吧，没那么文艺就是了，喜欢李贺的诗，那种把神当神的奇诡想象力，还有就是像恶之花这样的虽然我读不懂也懒得看解析但写的确实太美了促使我继续看下去的诗集
-		</p>
-	</section>
+        <h2>关于我自己</h2>
+        <p>中山大学生物医学工程学院 28 届在读</p>
+        <p>医学是兴趣，转码是生活；当前主要专注 AI Infra，方向包括训推框架、异构模型并行与通信库</p>
+        <p>预计 2026 年 4 到 6 月会持续更新博客，欢迎交流，也欢迎批评指正</p>
 
-	<style>
-		.about-block {
-			margin-bottom: 1.5rem;
-			line-height: 1.8;
-		}
+        <h2>兴趣爱好</h2>
+        <p>平常听术力口会很多很多，歌单基本都是术力口，中术日术都有，C社六子、Vsinger、五维介质、心华等等都听，只是听也不怎么混圈。</p>
+        <p>养了很多棉花娃娃，平常看到可爱的娃衣会给她们换装；一大爱好是出门给棉花娃娃拍照，远的话带着全国到处旅游，近的话出去逛街 citywalk 偶尔也会带着。</p>
+        <p>平常看户外番像《摇曳露营》、《Mono》、《女孩向山进发》、《少女终末旅行》之类的比较多，所以也比较喜欢户外活动如徒步、露营等，目标是毕业前徒步深圳市内所有推荐线路。</p>
+        <p>打游戏也是以单机为主，《赛博朋克2077》、《巫师三》、《荒野大镖客》、《The Hunter》，还有互动叙事类电影游戏像《底特律变人》、《暴雨》、《黑相集》等。</p>
+        <p>读书应该也算爱好，没那么文艺就是了，喜欢李贺的诗，那种“把神当神”的奇诡想象力；还有像《恶之花》，虽然我读不懂也懒得看解析，但写得确实太美，促使我继续看下去。</p>
 
-		.about-block h2 {
-			margin: 0 0 0.5rem;
-			font-size: 1.2rem;
-		}
-	</style>
-</Layout>
+        <h2>联系方式</h2>
+        <p>邮箱：<a href="mailto:wuyu051019@qq.com" style="color: var(--accent);">wuyu051019@qq.com</a></p>
+        <p>GitHub: <a href="https://github.com/2005WUYU" style="color: var(--accent);">@2005WUYU</a></p>
+      </div>
+    </div>
+    <script is:inline>
+      const html = document.documentElement;
+      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        html.classList.add('dark');
+      }
+    </script>
+  </body>
+</html>

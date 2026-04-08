@@ -2,183 +2,163 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 
-interface FriendLink {
-	name?: string;
-	url?: string;
-	avatar?: string;
-	description?: string;
-}
-
-const friendLinks: FriendLink[] = [
-	{
-		name: 'Yuuko',
-		url: 'yuukowww.github.io',
-		avatar: 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEEOLdpBMmBXRUlgNlNCv7TQlnr-uSXbgACyBgAAgJcKVQf4vtPBecjgjYE.jpg',
-		description: 'z神',
-	},
-	{
-		name: 'Fain',
-		url: 'knightofaxis.github.io',
-		avatar: 'https://github.com/user-attachments/assets/51f87e25-7fee-40c4-8dc1-4e3cab0f1dc6',
-		description: '博士生在读，vLLM绝赞学习中，目标是成为世一码',
-	},
-	{
-		name: 'Candlest',
-		url: 'https://blog.candlest.cc',
-		avatar: 'https://avatars.githubusercontent.com/u/125652899?v=4',
-		description: 'C神，蜡烛宝宝',
-	},
-	{
-		name: 'Honkai',
-		url: 'https://blog.honkai.top',
-		avatar: 'https://github.com/user-attachments/assets/7eb2cab7-257b-452b-859d-df790ee114f7',
-		description: '晓梦可爱捏',
-	},
+const friends = [
+  {
+    name: 'Yuuko',
+    url: 'https://yuukowww.github.io',
+    avatar: 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEEOLdpBMmBXRUlgNlNCv7TQlnr-uSXbgACyBgAAgJcKVQf4vtPBecjgjYE.jpg',
+    desc: 'z神'
+  },
+  {
+    name: 'Fain',
+    url: 'https://knightofaxis.github.io',
+    avatar: 'https://github.com/user-attachments/assets/51f87e25-7fee-40c4-8dc1-4e3cab0f1dc6',
+    desc: '博士生在读，vLLM绝赞学习中，目标是成为世一码'
+  },
+  {
+    name: 'Candlest',
+    url: 'https://blog.candlest.cc',
+    avatar: 'https://avatars.githubusercontent.com/u/125652899?v=4',
+    desc: 'C神，蜡烛宝宝'
+  },
+  {
+    name: 'Honkai',
+    url: 'https://blog.honkai.top',
+    avatar: 'https://github.com/user-attachments/assets/7eb2cab7-257b-452b-859d-df790ee114f7',
+    desc: '晓梦可爱捏'
+  }
 ];
-
-const toFullUrl = (url?: string) => {
-	if (!url) return '';
-	if (/^https?:\/\//i.test(url)) return url;
-	return `https://${url}`;
-};
-
-const getHost = (url?: string) => {
-	const full = toFullUrl(url);
-	if (!full) return '';
-	try {
-		return new URL(full).host;
-	} catch {
-		return full;
-	}
-};
-
-const getDisplayName = (item: FriendLink) => item.name?.trim() || getHost(item.url) || '未命名站点';
 ---
 
 <!doctype html>
-<html lang="zh-CN">
-	<head>
-		<BaseHead title={`${SITE_TITLE} | 友链`} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
+<html lang="zh-cn">
+  <head>
+    <BaseHead title={`Links - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+    <style>
+      :root {
+        --text-color: #2c3e50;
+        --bg-color: #f7f9fc;
+        --border-light: rgba(0,0,0,0.08);
+        --accent: #66ccff;
+        --card-bg: rgba(255, 255, 255, 0.6);
+        --glass-border: rgba(255,255,255,0.4);
+      }
+      html.dark {
+        --text-color: #e2e8f0;
+        --bg-color: #1a1b26;
+        --border-light: rgba(255,255,255,0.08);
+        --accent: #88ddff;
+        --card-bg: rgba(30,30,46,0.5);
+        --glass-border: rgba(255,255,255,0.05);
+      }
+      body {
+        margin: 0;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        transition: background-color 0.4s ease, color 0.4s ease;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 840px;
+        margin: 0 auto;
+        padding: 5rem 2rem;
+      }
+      .page-header {
+        margin-bottom: 3rem;
+      }
+      .page-title {
+        font-size: 2.2rem;
+        font-weight: 300;
+        letter-spacing: 2px;
+        color: var(--text-color);
+        margin: 0 0 1rem 0;
+      }
+      .links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+      .friend-card {
+        background: var(--card-bg);
+        backdrop-filter: blur(8px);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid var(--border-light);
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        text-decoration: none;
+        color: var(--text-color);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .friend-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
+      .friend-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        background-color: var(--border-light);
+        flex-shrink: 0;
+      }
+      .friend-info {
+        flex: 1;
+      }
+      .friend-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+      }
+      .friend-desc {
+        font-size: 0.85rem;
+        opacity: 0.7;
+        line-height: 1.4;
+      }
+      .back-btn {
+        margin-bottom: 2rem;
+        display: inline-block;
+        text-decoration: none;
+        color: var(--text-color);
+        opacity: 0.6;
+        transition: opacity 0.3s;
+      }
+      .back-btn:hover {
+        opacity: 1;
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="/" class="back-btn">← Back to Home</a>
+      <div class="page-header">
+        <h1 class="page-title">Links</h1>
+        <p style="opacity: 0.8">朋友们的链接与友站收集</p>
+      </div>
 
-			.friend-grid {
-				display: grid;
-				grid-template-columns: repeat(2, minmax(0, 1fr));
-				gap: 1rem;
-				list-style: none;
-				margin: 0;
-				padding: 0;
-			}
-
-			.friend-card {
-				border: 1px solid rgba(var(--black), 0.12);
-				border-radius: 12px;
-				padding: 1rem;
-				background: #fff;
-				display: grid;
-				grid-template-columns: 56px 1fr;
-				column-gap: 0.85rem;
-				align-items: start;
-				min-height: 130px;
-				transition: border-color 0.2s ease, box-shadow 0.2s ease;
-			}
-
-			.friend-card:hover {
-				border-color: rgb(var(--accent));
-				box-shadow: var(--box-shadow);
-			}
-
-			.avatar {
-				width: 56px;
-				height: 56px;
-				border-radius: 50%;
-				object-fit: cover;
-				display: block;
-				background: rgba(var(--gray-light), 0.45);
-			}
-
-			.avatar-fallback {
-				width: 56px;
-				height: 56px;
-				border-radius: 50%;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				background: rgba(var(--gray), 0.18);
-				color: rgb(var(--black));
-				font-weight: 700;
-			}
-
-			.friend-name {
-				margin: 0;
-				font-size: 1.05rem;
-				line-height: 1.35;
-			}
-
-			.friend-url {
-				display: inline-block;
-				margin-top: 0.25rem;
-				font-size: 0.92rem;
-				word-break: break-all;
-			}
-
-			.friend-desc {
-				margin: 0.65rem 0 0;
-				color: rgb(var(--gray));
-				line-height: 1.6;
-				min-height: 1.6em;
-			}
-
-			@media (max-width: 900px) {
-				.friend-grid {
-					grid-template-columns: 1fr;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>友链</h1>
-			<ul class="friend-grid">
-				{
-					friendLinks.map((item) => {
-						const fullUrl = toFullUrl(item.url);
-						const displayName = getDisplayName(item);
-						const displayLink = item.url?.trim() || '';
-						const intro = item.description?.trim() || '';
-						const avatar = item.avatar?.trim() || '';
-						const initials = displayName.slice(0, 1).toUpperCase();
-
-						return (
-							<li class="friend-card">
-								{avatar ? (
-									<img class="avatar" src={avatar} alt={`${displayName} avatar`} loading="lazy" />
-								) : (
-									<div class="avatar-fallback" aria-hidden="true">{initials}</div>
-								)}
-								<div>
-									<h2 class="friend-name">{displayName}</h2>
-									{fullUrl ? (
-										<a class="friend-url" href={fullUrl} target="_blank" rel="noopener noreferrer">
-											{displayLink || fullUrl}
-										</a>
-									) : (
-										<span class="friend-url"></span>
-									)}
-									<p class="friend-desc">{intro}</p>
-								</div>
-							</li>
-						);
-					})
-				}
-			</ul>
-		</main>
-		<Footer />
-	</body>
+      <div class="links-grid">
+        {friends.map(friend => (
+          <a href={friend.url} target="_blank" rel="noopener noreferrer" class="friend-card">
+            <div class="friend-avatar" style={`background-image: url('${friend.avatar}');`}></div>
+            <div class="friend-info">
+              <div class="friend-name">{friend.name}</div>
+              <div class="friend-desc">{friend.desc}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+    <script is:inline>
+      const html = document.documentElement;
+      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        html.classList.add('dark');
+      }
+    </script>
+  </body>
 </html>
