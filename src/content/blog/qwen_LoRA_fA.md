@@ -2,7 +2,7 @@
 title: 'Qwen2.5-7B LoRA 微调显存分析与 FlashAttention 原理'
 description: '从全参数微调到 LoRA 的显存拆解，结合混合精度与 FlashAttention 核心机制的推导说明。'
 pubDate: 'Apr 06 2026'
-heroImage: '../../assets/mmexport1749396240039.jpg'
+heroImage: '../../assets/八辈子洛天依.jpg'
 ---
 
 ## 第一部分：分析显存占用
